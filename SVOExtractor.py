@@ -3,7 +3,7 @@ import re
 import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 
-# 主题颜色定义
+# 主题颜色定义 (AkiACG Style)
 COLOR_BG = "#1e1e1e" 
 COLOR_CARD = "#2d2d2d" 
 COLOR_ACCENT = "#00adb5"
@@ -15,7 +15,7 @@ class SVO_Extractor_Aki:
     def __init__(self, root):
         self.root = root
         self.root.title("SVO Extractor | AkiACG Resource Tools")
-        self.root.geometry("700x550")
+        self.root.geometry("700x600") # 稍微增加了一点高度更美观
         self.root.configure(bg=COLOR_BG)
 
         # 设置字体
@@ -28,14 +28,24 @@ class SVO_Extractor_Aki:
         self.setup_ui()
 
     def setup_ui(self):
-        # 顶部 Header 装饰
+        # 1. 顶部 Header
         header = tk.Frame(self.root, bg=COLOR_ACCENT, height=50)
         header.pack(fill="x", side="top")
         tk.Label(header, text="SVO EXTRACTOR", bg=COLOR_ACCENT, fg="white", 
                  font=("Consolas", 16, "bold")).pack(pady=10)
 
-        # 主容器
-        main_frame = tk.Frame(self.root, bg=COLOR_BG, padx=30, pady=20)
+        # 2. 底部按钮区 (先Pack按钮，确保它永远在最下面)
+        btn_frame = tk.Frame(self.root, bg=COLOR_BG, padx=30, pady=20)
+        btn_frame.pack(fill="x", side="bottom")
+        
+        btn_run = tk.Button(btn_frame, text="START EXTRACTION", bg=COLOR_ACCENT, fg="white",
+                           activebackground="#008c94", activeforeground="white",
+                           font=self.font_bold, relief="flat", height=2, cursor="hand2",
+                           command=self.start_extraction)
+        btn_run.pack(fill="x")
+
+        # 3. 中间主容器 (占据剩余所有空间)
+        main_frame = tk.Frame(self.root, bg=COLOR_BG, padx=30, pady=10)
         main_frame.pack(fill="both", expand=True)
 
         # 路径选择区域
@@ -53,18 +63,12 @@ class SVO_Extractor_Aki:
                                         orient="horizontal", mode="determinate")
         self.progress.pack(fill="x")
 
-        # 控制台日志
+        # 控制台日志 (高度设置为 10，并随窗口伸缩)
         tk.Label(main_frame, text="运行日志:", bg=COLOR_BG, fg=COLOR_TEXT_DIM, font=self.font_main).pack(anchor="w", pady=(15, 5))
         self.log_text = tk.Text(main_frame, bg=COLOR_CARD, fg=COLOR_TEXT, borderwidth=0, 
-                                padx=10, pady=10, font=("Consolas", 9), insertbackground="white")
+                                padx=10, pady=10, font=("Consolas", 9), insertbackground="white",
+                                height=10) # 初始高度
         self.log_text.pack(fill="both", expand=True)
-
-        # 底部按钮
-        btn_run = tk.Button(self.root, text="START EXTRACTION", bg=COLOR_ACCENT, fg="white",
-                           activebackground="#008c94", activeforeground="white",
-                           font=self.font_bold, relief="flat", height=2, cursor="hand2",
-                           command=self.start_extraction)
-        btn_run.pack(fill="x", side="bottom", padx=30, pady=20)
 
     def create_path_row(self, parent, label_text, var, command):
         tk.Label(parent, text=label_text, bg=COLOR_BG, fg=COLOR_TEXT, font=self.font_main).pack(anchor="w", pady=(10, 2))
@@ -77,7 +81,7 @@ class SVO_Extractor_Aki:
                         padx=15, font=("Arial", 8, "bold"), command=command, cursor="hand2")
         btn.pack(side="right", padx=(5, 0))
 
-    # --- 逻辑部分 ---
+    # --- 逻辑部分保持不变 ---
     def browse_svo(self):
         path = filedialog.askdirectory()
         if path: self.svo_dir.set(path)
@@ -102,7 +106,7 @@ class SVO_Extractor_Aki:
             return
 
         svo_files = []
-        for root, dirs, files in os.walk(input_path): # 支持递归子目录
+        for root, dirs, files in os.walk(input_path):
             for f in files:
                 if f.lower().endswith(".svo"):
                     svo_files.append(os.path.join(root, f))
@@ -111,6 +115,7 @@ class SVO_Extractor_Aki:
             self.log("未发现 .svo 文件", "#ff5555")
             return
 
+        self.progress["value"] = 0
         self.progress["maximum"] = len(svo_files)
         self.log(f"开始任务: 发现 {len(svo_files)} 个文件")
         
@@ -121,7 +126,7 @@ class SVO_Extractor_Aki:
             self.progress["value"] = idx + 1
             
         self.log("DONE! 提取任务完成", COLOR_SUCCESS)
-        messagebox.showinfo("AkiACG.Tool.SVO.Extractor", "所有贴图已成功导出！")
+        messagebox.showinfo("AkiACG Tool", "所有贴图已成功导出！")
 
     def extract_logic(self, svo_path, out_base):
         try:
@@ -146,6 +151,3 @@ if __name__ == "__main__":
     app_root = tk.Tk()
     SVO_Extractor_Aki(app_root)
     app_root.mainloop()
-
-# Present by AkiACG.com
-# Version 1.0.0
