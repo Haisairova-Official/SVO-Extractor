@@ -1,0 +1,1 @@
+pyinstaller -F -w --version-file verinfo.txt Extractor.py -i SVOEXT.ico
