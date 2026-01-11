@@ -15,7 +15,7 @@ class Extractor:
     def __init__(self, root):
         self.root = root
         self.root.title("AkiACG All-in-One TeaGFX Extractor")
-        self.root.geometry("750x650")
+        self.root.geometry("750x850")
         self.root.configure(bg=COLOR_BG)
 
         self.font_main = ("Microsoft YaHei", 10)
