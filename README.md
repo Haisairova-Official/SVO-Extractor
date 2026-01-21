@@ -1,6 +1,8 @@
 # TeaGFX Extractor
-适用于茶引擎的SVO+AFB私有格式的DDS提取器
-### *新附属项目：[TeaGFX Replacer](https://github.com/Haisairova-Official/TeaGFX-Replacer/)*
+适用于茶引擎的SVO+AFB私有格式的DDS提取器.
+
+***本项目从2026/01/21起正式吸收[DDSExtractor](https://github.com/XNTech/DDSExtractor)项目***
+### *新附属项目：[TeaGFX Replacer](https://github.com/Akizuki-Technics/TeaGFX-Replacer/)*
 
 **TeaGFXExtractor** 是一款专为 **Chunithm**以及**Maimai(旧框体)** 及其相关街机平台设计的资源提取工具。本工具通过深度扫描 `.svo`与`.afb` 容器文件，能够全自动、批量化地提取出内部封装的 **DDS 贴图资源**。
 对于AFB文件，感谢文档指引，我们现在已经可以直接提取其真实文件名。
